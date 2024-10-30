@@ -12,25 +12,11 @@
         const authCode = params.get('code');
 
         if (authCode) {
-            // Log the authorization code
+            // Log the authorization code to the console
             console.log("Authorization Code:", authCode);
 
-            // Optionally, send the code to your backend for processing
-            fetch('https://codrincod.github.io/redirect-url/', {  // Replace with your backend URL
-                method: 'POST',
-                body: JSON.stringify({ code: authCode }),
-                headers: { 'Content-Type': 'application/json' }
-            }).then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error('Network response was not ok');
-                }
-            }).then(data => {
-                console.log('Success:', data);
-            }).catch(error => {
-                console.error('Error:', error);
-            });
+            // Display the authorization code on the webpage
+            document.body.innerHTML = "<h1>Authorization Code Received:</h1><p>" + authCode + "</p>";
         } else {
             // If no code was received, display an error message
             document.body.innerHTML = "No authorization code received.";
