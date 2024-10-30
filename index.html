@@ -23,11 +23,14 @@
             console.log("Authorization Code:", authorizationCode);
 
             // Here you would send the authorization code to your backend or further processing
-            // For example, send it to a server to exchange for an access token
             // Example: sendToBackend(authorizationCode);
+            // Optionally, redirect to a different page or show success message
+            window.location.href = "YOUR_BACKEND_URL?code=" + authorizationCode; // Replace with your backend URL
         } else {
             // If no authorization code is found
             console.log("No authorization code received.");
+            // Provide a message or redirect to the authorization URL if needed
+            document.body.innerHTML += "<p>No authorization code received. Please try again.</p>";
         }
     </script>
     <p>If you are not redirected, <a href="https://codrincod.github.io/redirect-url/">click here</a>.</p>
