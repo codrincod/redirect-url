@@ -3,36 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Authorization Redirect</title>
+    <title>Redirect Page</title>
 </head>
 <body>
     <script>
-        // Function to get URL parameters
-        function getUrlParameter(name) {
-            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)'),
-                results = regex.exec(location.search);
-            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
-        }
+        // Get the URL parameters
+        const params = new URLSearchParams(window.location.search);
+        const authCode = params.get('code');
 
-        // Get the authorization code from the URL
-        var authorizationCode = getUrlParameter('code');
+        if (authCode) {
+            // Log the authorization code
+            console.log("Authorization Code:", authCode);
 
-        if (authorizationCode) {
-            // Log the authorization code to the console
-            console.log("Authorization Code:", authorizationCode);
-
-            // Here you would send the authorization code to your backend or further processing
-            // Example: sendToBackend(authorizationCode);
-            // Optionally, redirect to a different page or show success message
-            window.location.href = "YOUR_BACKEND_URL?code=" + authorizationCode; // Replace with your backend URL
+            // Optionally, send the code to your backend for processing
+            fetch('https://codrincod.github.io/redirect-url/', {  // Replace with your backend URL
+                method: 'POST',
+                body: JSON.stringify({ code: authCode }),
+                headers: { 'Content-Type': 'application/json' }
+            }).then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Network response was not ok');
+                }
+            }).then(data => {
+                console.log('Success:', data);
+            }).catch(error => {
+                console.error('Error:', error);
+            });
         } else {
-            // If no authorization code is found
-            console.log("No authorization code received.");
-            // Provide a message or redirect to the authorization URL if needed
-            document.body.innerHTML += "<p>No authorization code received. Please try again.</p>";
+            // If no code was received, display an error message
+            document.body.innerHTML = "No authorization code received.";
         }
     </script>
-    <p>If you are not redirected, <a href="https://codrincod.github.io/redirect-url/">click here</a>.</p>
 </body>
 </html>
